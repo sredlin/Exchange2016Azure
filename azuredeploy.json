@@ -8,7 +8,14 @@
             "metadata": {
                 "description": "Exchange Mailbox storage size in GB."
             },
-            "vmAdminPassword": ""
+           
+		
+		
+		"vmAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
         }
        
     },
