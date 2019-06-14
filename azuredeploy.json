@@ -7,17 +7,14 @@
             "defaultValue": 10,
             "metadata": {
                 "description": "Exchange Mailbox storage size in GB."
-            },
-           
-		
-		
-		"vmAdminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for the Virtual Machine."
-      }
+            }
+        },
+        "vmAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                 "description": "Password for the Virtual Machine."
+         }
         }
-       
     },
     "variables": {
         "exchangeVMCount": 1,
@@ -36,7 +33,7 @@
         "location": "[resourceGroup().location]",
         "vmOsSku": "2012-R2-Datacenter",
         "vmAdminUsername": "vbu-adm",
-        
+        "vmAdminPassword": "[subscription().subscriptionId]",
         "vmName": "[concat('vm', resourceGroup().name)]",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
@@ -46,7 +43,7 @@
         "virtualNetworkName": "[tolower(concat('vn', resourceGroup().name))]",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-        "modulesPath": "https://raw.githubusercontent.com/sredlin/Exchange2016Azure/master/",
+        "modulesPath": "https://raw.githubusercontent.com/Azure/AzureStack-QuickStart-Templates/master/exchange-2016-non-ha/",
         "modulesExchange": "ExchangeWorkload.zip",
         "modulesUrlExchange": "[concat(variables('modulesPath'),variables('modulesExchange'))]",
         "modulesExchangeData": "ExchangeWorkload.psd1",
@@ -55,7 +52,7 @@
         "nsgName": "[tolower(concat('ng', resourceGroup().name))]",
         "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
         "exchangeInstallerPath": "InstallerExchange",
-        "exchangeISOUri": "https://download.microsoft.com/download/2/5/8/258D30CF-CA4C-433A-A618-FB7E6BCC4EEE/ExchangeServer2016-x64-cu12.iso",
+        "exchangeISOUri": "https://download.microsoft.com/download/1/F/7/1F777B44-32CB-4F3D-B486-3D0F566D79A9/ExchangeServer2016-x64-cu8.iso",
         "modulesExchangeISODownload": "CSDownloadISO.ps1",
         "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]"
     },
