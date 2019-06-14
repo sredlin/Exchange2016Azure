@@ -33,7 +33,6 @@
         "location": "[resourceGroup().location]",
         "vmOsSku": "2012-R2-Datacenter",
         "vmAdminUsername": "vbu-adm",
-        "vmAdminPassword": "[subscription().subscriptionId]",
         "vmName": "[concat('vm', resourceGroup().name)]",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
