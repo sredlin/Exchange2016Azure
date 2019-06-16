@@ -1,18 +1,18 @@
-# EXCHANGE 2016 CU1 INSTALLATION
+# EXCHANGE 2016 CU12 INSTALLATION
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fsredlin%2FExchange2016Azure%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
 
-This template deploys Exchange 2016.
+This template deploys Exchange 2016 CU12.
 
-`Tags: [exchange, mailbox]`
+
 
 | Endpoint        | Version           | Validated  |
 | ------------- |:-------------:| -----:|
 | Microsoft Azure      | - | YES |
-| Microsoft Azure Stack      | - |  YES |
+
 
 ## Deployed resources
 
