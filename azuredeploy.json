@@ -9,37 +9,47 @@
                 "description": "Exchange Mailbox storage size in GB."
             }
         },
-        "vmAdminPassword": {
+    "vmAdminPassword": {
             "type": "securestring",
             "metadata": {
                  "description": "Password for the Virtual Machine."
          }
+        },
+    "trainee": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3,
+            "metadata": {
+                 "description": "Trainee  Nick Name."
+         }
         }
     },
+    
     "variables": {
+        "Company" : "LEARN",
         "exchangeVMCount": 1,
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
         "addressPrefix": "10.0.0.0/16",
         "storageAccountType": "Standard_LRS",
-        "publicIPAddressName": "[tolower(concat('ip', resourceGroup().name))]",
+        "publicIPAddressName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'pip-',variables('vmName')))]",
         "publicIPAddressType": "Dynamic",
         "subnetPrefix": "10.0.0.0/24",
-        "subnetName": "[tolower(concat('sn', resourceGroup().name))]",
-        "exchangeDomainName": "[tolower(concat(resourceGroup().name, '.com'))]",
+        "subnetName": "[tolower(concat('Subnet0'))]",
+        "exchangeDomainName": "[tolower(concat(parameters('trainee'), '.intern'))]",
         "uniqueDnsNameForPublicIP": "[tolower(concat('dns', resourceGroup().name))]",
         "uniqueStorageAccountName": "[tolower(concat('sa', resourceGroup().name))]",
         "uniqueStorageAccountContainerName": "[tolower(concat('sc', resourceGroup().name))]",
         "location": "[resourceGroup().location]",
         "vmOsSku": "2012-R2-Datacenter",
         "vmAdminUsername": "vbu-adm",
-        "vmName": "[concat('vm', resourceGroup().name)]",
-        "vmOsDiskName": "[concat('od', resourceGroup().name)]",
-        "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
+        "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'vm-'))]",
+        "vmOsDiskName": "[concat('osdisk-', variables('vmName'))]",
+        "vmDataDiskName": "[concat('datadisk-', variables('vmName'))]",
         "vmSize": "Standard_D2_v2",
         "vmDataDiskSize": "15",
-        "vmNicName": "[tolower(concat('nc', resourceGroup().name))]",
-        "virtualNetworkName": "[tolower(concat('vn', resourceGroup().name))]",
+        "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'nic-',variables('vmName')))]",
+        "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'vn-infrastructure'))]",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
         "modulesPath": "https://raw.githubusercontent.com/sredlin/Exchange2016Azure/master/",
@@ -48,10 +58,11 @@
         "modulesExchangeData": "ExchangeWorkload.psd1",
         "modulesUrlExchangeData": "[concat(variables('modulesPath'),variables('modulesExchangeData'))]",
         "configurationFunctionExchange": "ExchangeWorkload.ps1\\InstallAndConfigureExchange",
-        "nsgName": "[tolower(concat('ng', resourceGroup().name))]",
+        "nsgName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'nsg-infrastructure'))]",
         "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
         "exchangeInstallerPath": "InstallerExchange",
-        "exchangeISOUri": "https://download.microsoft.com/download/2/5/8/258D30CF-CA4C-433A-A618-FB7E6BCC4EEE/ExchangeServer2016-x64-cu12.iso",        "modulesExchangeISODownload": "CSDownloadISO.ps1",
+        "exchangeISOUri": "https://download.microsoft.com/download/2/5/8/258D30CF-CA4C-433A-A618-FB7E6BCC4EEE/ExchangeServer2016-x64-cu12.iso",
+        "modulesExchangeISODownload": "CSDownloadISO.ps1",
         "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]"
     },
     "resources": [
