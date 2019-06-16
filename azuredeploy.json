@@ -189,7 +189,10 @@
                     "osDisk": {
                         "name": "[concat(variables('vmOsDiskName'),copyIndex(),'-0')]",
                         "caching": "ReadWrite",
-                        "createOption": "FromImage"
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                          }
                     },
                     "dataDisks": [
                         {
@@ -197,14 +200,20 @@
                             "createOption": "Empty",
                             "caching": "None",
                             "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 0
+                            "lun": 0,
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                              }
                         },
                         {
                             "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-1')]",
                             "createOption": "Empty",
                             "caching": "None",
                             "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 1
+                            "lun": 1,
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                              }
                         }
                     ]
                 },
