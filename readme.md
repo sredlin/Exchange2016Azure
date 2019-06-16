@@ -27,12 +27,6 @@ The following resources are deployed as part of the solution
 + **Virtual Machine**: To run Jetstress test
 + **DSC Extension**: Install Exchange 2016
 
-## EXCHANGE (2016) INSTALLATION FOR AZURESTACK ##
-
-
-<b>DESCRIPTION</b>
-
-This template deploys requested number of VMs with public IP address in same virtual network. DSC installs Exchange 2016 Cumulative Update 1.
 
 Please make sure to user unique resource group name for each deployment to avoid deployment failures due to name collisions of resources.
 
@@ -45,10 +39,3 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010
 & 'E:\Exchange\Bin\RemoteExchange.ps1'
 ```
 
-
-<b>PARAMETERS</b>
-```PowerShell
-exchangeVMCount: 2 #[Number of VMs to deploy and run jestress workload]
-
-exchangeStorageSize: 10GB #[Exchange Mailbox size in bytes]
-```
