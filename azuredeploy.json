@@ -32,15 +32,12 @@
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
         "addressPrefix": "10.0.0.0/16",
-        "storageAccountType": "Standard_LRS",
         "publicIPAddressName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-pip-',skip(variables('vmName'),variables('charactersToSkip'))))]",
         "publicIPAddressType": "Dynamic",
         "subnetPrefix": "10.0.0.0/24",
         "subnetName": "[tolower(concat('Subnet0'))]",
         "exchangeDomainName": "[tolower(concat(parameters('trainee'), '.intern'))]",
         "uniqueDnsNameForPublicIP": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-dns-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-        "uniqueStorageAccountName": "[tolower(concat('sa', resourceGroup().name))]",
-        "uniqueStorageAccountContainerName": "[tolower(concat('sc', resourceGroup().name))]",
         "location": "[resourceGroup().location]",
         "vmOsSku": "2012-R2-Datacenter",
         "vmAdminUsername": "vbu-adm",
@@ -67,16 +64,7 @@
         "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]"
     },
     "resources": [
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[tolower(variables('uniqueStorageAccountName'))]",
-            "location": "[variables('location')]",
-            "properties": {
-                "accountType": "[variables('storageAccountType')]"
-            }
-        },
-        {
+            {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[concat(variables('publicIPAddressName'),copyIndex())]",
@@ -180,7 +168,6 @@
                 "count": "[variables('exchangeVMCount')]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/',variables('uniqueStorageAccountName'))]",
                 "[concat('Microsoft.Network/networkInterfaces/',variables('vmNicName'),copyIndex())]"
             ],
             "properties": {
@@ -200,18 +187,12 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "osdisk",
-                        "vhd": {
-                            "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmOsDiskName'),copyIndex(),'.vhd')]"
-                        },
+                        "name": "[concat(variables('vmOsDiskName'),copyIndex(),'-0')]",
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
                     },
                     "dataDisks": [
                         {
-                            "vhd": {
-                                "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmDataDiskName'),copyIndex(),'-0','.vhd')]"
-                            },
                             "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-0')]",
                             "createOption": "Empty",
                             "caching": "None",
@@ -219,9 +200,6 @@
                             "lun": 0
                         },
                         {
-                            "vhd": {
-                                "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmDataDiskName'),copyIndex(),'-1','.vhd')]"
-                            },
                             "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-1')]",
                             "createOption": "Empty",
                             "caching": "None",
