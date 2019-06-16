@@ -191,7 +191,7 @@
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {
-                            "storageAccountType": "Premium_LRS"
+                            "storageAccountType": "Standard_LRS"
                           }
                     },
                     "dataDisks": [
@@ -202,7 +202,7 @@
                             "diskSizeGB": "[variables('vmDataDiskSize')]",
                             "lun": 0,
                             "managedDisk": {
-                                "storageAccountType": "Premium_LRS"
+                                "storageAccountType": "Standard_LRS"
                               }
                         },
                         {
@@ -212,7 +212,7 @@
                             "diskSizeGB": "[variables('vmDataDiskSize')]",
                             "lun": 1,
                             "managedDisk": {
-                                "storageAccountType": "Premium_LRS"
+                                "storageAccountType": "Standard_LRS"
                               }
                         }
                     ]
