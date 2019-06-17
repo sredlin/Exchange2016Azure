@@ -5,7 +5,7 @@
 </a>
 
 
-This template deploys Exchange 2016 CU12.
+This template deploys a VM with ADDS and Exchange 2016 CU12 installed.
 
 
 
@@ -28,14 +28,5 @@ The following resources are deployed as part of the solution
 + **DSC Extension**: Install Exchange 2016
 
 
-Please make sure to user unique resource group name for each deployment to avoid deployment failures due to name collisions of resources.
 
-NOTE: There is a 90 minutes Azure time-out which you can hit if internet connection is slower to download installation files and takes longer than 60 minutes.
-
-NOTE: To use Exchange Management Shell in compatibility mode, use PowerShell code snippet given below-
-
-```PowerShell
-Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010
-& 'E:\Exchange\Bin\RemoteExchange.ps1'
-```
 
