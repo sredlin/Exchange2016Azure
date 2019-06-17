@@ -279,7 +279,8 @@
                             "userName": "[variables('vmAdminUsername')]",
                             "password": "PrivateSettingsRef:vmAdminPassword"
                         },
-                        "Location": "[variables('location')]"
+                        "Location": "[variables('location')]",
+			"Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
                     }
                 },
                 "protectedSettings": {
