@@ -296,10 +296,10 @@
 
       {
         "name": "[concat(variables('vmName'),copyIndex(),'/updateVNetDNSAddress','/config')]",
-        "type": "Microsoft.Resources/deployments/config",
-        "apiVersion": "2015-01-01",
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "apiVersion": "2019-02-01",
         "copy": {
-          "name": "extensionLoop",
+          "name": "updateVNetDNSAddressLoop",
           "count": "[variables('exchangeVMCount')]"
         },
         "dependsOn": [
