@@ -2,13 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-	"exchangeStorageSizeInGB": {
-            "type": "int",
-            "defaultValue": 10,
-            "metadata": {
-                "description": "Exchange Mailbox storage size in GB."
-            }
-        },
+
+      
     "vmAdminPassword": {
             "type": "securestring",
             "metadata": {
@@ -26,6 +21,7 @@
     },
 
   "variables": {
+    "exchangeStorageSizeInGB": 10,
     "charactersToSkip": 10,
     "Company": "LEARN",
     "imagePublisher": "MicrosoftWindowsServer",
@@ -62,7 +58,8 @@
     "modulesExchangeISODownload": "CSDownloadISO.ps1",
     "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]",
     "DiagStorageName": "[tolower(concat(variables('Company'),parameters('trainee'),'sadiag'))]",
-    "DiagStorageType": "Standard_LRS"
+    "DiagStorageType": "Standard_LRS",
+    "VMStorageType": "Premium_LRS"
   },
   "resources": [
     {
@@ -188,11 +185,11 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "[concat(variables('vmOsDiskName'),'-0')]",
+            "name": "[concat(variables('vmOsDiskName'))]",
             "caching": "ReadWrite",
             "createOption": "FromImage",
             "managedDisk": {
-              "storageAccountType": "Standard_LRS"
+              "storageAccountType": "[variables('VMStorageType')]"
             }
           },
           "dataDisks": [
@@ -203,7 +200,7 @@
               "diskSizeGB": "[variables('vmDataDiskSize')]",
               "lun": 0,
               "managedDisk": {
-                "storageAccountType": "Standard_LRS"
+                "storageAccountType": "[variables('VMStorageType')]"
               }
             },
             {
@@ -213,7 +210,7 @@
               "diskSizeGB": "[variables('vmDataDiskSize')]",
               "lun": 1,
               "managedDisk": {
-                "storageAccountType": "Standard_LRS"
+                "storageAccountType": "[variables('VMStorageType')]"
               }
             }
           ]
@@ -267,7 +264,7 @@
           "configurationFunction": "[variables('configurationFunctionExchange')]",
           "properties": {
             "DomainName": "[variables('exchangeDomainName')]",
-            "StorageSize": "[parameters('exchangeStorageSizeInGB')]",
+            "StorageSize": "[variables('exchangeStorageSizeInGB')]",
             "VMAdminCreds": {
               "userName": "[variables('vmAdminUsername')]",
               "password": "PrivateSettingsRef:vmAdminPassword"
