@@ -24,251 +24,265 @@
          }
         }
     },
-    
-    "variables": {
-        "charactersToSkip" : 10,
-        "Company" : "LEARN",
-        "imagePublisher": "MicrosoftWindowsServer",
-        "imageOffer": "WindowsServer",
-        "addressPrefix": "10.0.0.0/16",
-        "publicIPAddressName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-pip-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-        "publicIPAddressType": "Dynamic",
-        "subnetPrefix": "10.0.0.0/24",
-        "subnetName": "[tolower(concat('Subnet0'))]",
-        "exchangeDomainName": "[tolower(concat(parameters('trainee'), '.intern'))]",
-        "uniqueDnsNameForPublicIP": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-dns-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-        "location": "[resourceGroup().location]",
-        "vmOsSku": "2012-R2-Datacenter",
-        "vmAdminUsername": "vbu-adm",
-        "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm'))]",
-        "vmOsDiskName": "[concat('osdisk-', variables('vmName'))]",
-        "vmDataDiskName": "[concat('datadisk-', variables('vmName'))]",
-        "vmSize": "Standard_D2_v2",
-        "vmDataDiskSize": "15",
-        "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-        "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
-        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-        "modulesPath": "https://raw.githubusercontent.com/sredlin/Exchange2016Azure/master/",
-        "modulesExchange": "ExchangeWorkload.zip",
-        "modulesUrlExchange": "[concat(variables('modulesPath'),variables('modulesExchange'))]",
-        "modulesExchangeData": "ExchangeWorkload.psd1",
-        "modulesUrlExchangeData": "[concat(variables('modulesPath'),variables('modulesExchangeData'))]",
-        "configurationFunctionExchange": "ExchangeWorkload.ps1\\InstallAndConfigureExchange",
-        "nsgName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nsg-infrastructure'))]",
-        "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
-        "exchangeInstallerPath": "InstallerExchange",
-        "exchangeISOUri": "https://download.microsoft.com/download/2/5/8/258D30CF-CA4C-433A-A618-FB7E6BCC4EEE/ExchangeServer2016-x64-cu12.iso",
-        "modulesExchangeISODownload": "CSDownloadISO.ps1",
-        "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]"
+
+  "variables": {
+    "charactersToSkip": 10,
+    "Company": "LEARN",
+    "imagePublisher": "MicrosoftWindowsServer",
+    "imageOffer": "WindowsServer",
+    "addressPrefix": "10.0.0.0/16",
+    "publicIPAddressName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-pip-',skip(variables('vmName'),variables('charactersToSkip'))))]",
+    "publicIPAddressType": "Dynamic",
+    "subnetPrefix": "10.0.0.0/24",
+    "subnetName": "[tolower(concat('Subnet0'))]",
+    "exchangeDomainName": "[tolower(concat(parameters('trainee'), '.intern'))]",
+    "uniqueDnsNameForPublicIP": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-dns-',skip(variables('vmName'),variables('charactersToSkip'))))]",
+    "location": "[resourceGroup().location]",
+    "vmOsSku": "2012-R2-Datacenter",
+    "vmAdminUsername": "vbu-adm",
+    "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm'))]",
+    "vmOsDiskName": "[concat('osdisk-', variables('vmName'))]",
+    "vmDataDiskName": "[concat('datadisk-', variables('vmName'))]",
+    "vmSize": "Standard_D2_v2",
+    "vmDataDiskSize": "15",
+    "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmName'),variables('charactersToSkip'))))]",
+    "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "modulesPath": "https://raw.githubusercontent.com/sredlin/Exchange2016Azure/master/",
+    "modulesExchange": "ExchangeWorkload.zip",
+    "modulesUrlExchange": "[concat(variables('modulesPath'),variables('modulesExchange'))]",
+    "modulesExchangeData": "ExchangeWorkload.psd1",
+    "modulesUrlExchangeData": "[concat(variables('modulesPath'),variables('modulesExchangeData'))]",
+    "configurationFunctionExchange": "ExchangeWorkload.ps1\\InstallAndConfigureExchange",
+    "nsgName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nsg-infrastructure'))]",
+    "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
+    "exchangeInstallerPath": "InstallerExchange",
+    "exchangeISOUri": "https://download.microsoft.com/download/2/5/8/258D30CF-CA4C-433A-A618-FB7E6BCC4EEE/ExchangeServer2016-x64-cu12.iso",
+    "modulesExchangeISODownload": "CSDownloadISO.ps1",
+    "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]",
+    "DiagStorageName": "[tolower(concat(variables('Company'),parameters('trainee'),'sadiag'))]",
+    "DiagStorageType": "Standard_LRS"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('DiagStorageName')]",
+      "apiVersion": "2015-06-15",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "StorageAccount"
+      },
+      "properties": {
+        "accountType": "[variables('DiagStorageType')]"
+      }
     },
-    "resources": [
-            {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[concat(variables('publicIPAddressName'))]",
-            "location": "[variables('location')]",
-            "properties": {
-                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-                "dnsSettings": {
-                    "domainNameLabel": "[variables('uniqueDnsNameForPublicIP')]"
-                }
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('nsgName')]",
-            "location": "[variables('location')]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "nsgsrule",
-                        "properties": {
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 101,
-                            "direction": "Inbound"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[variables('virtualNetworkName')]",
-            "location": "[variables('location')]",
-            "dependsOn": [ "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]" ],
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[variables('addressPrefix')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[variables('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[variables('subnetPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[variables('nsgID')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('vmNicName'))]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'))]",
-                "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfigpublic",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName')))]"
-                            },
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2017-03-30",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(variables('vmName'))]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/',variables('vmNicName'))]"
-            ],
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[variables('vmSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[variables('vmName')]",
-                    "adminUsername": "[variables('vmAdminUsername')]",
-                    "adminPassword": "[parameters('vmAdminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "[variables('imagePublisher')]",
-                        "offer": "[variables('imageOffer')]",
-                        "sku": "[variables('vmOsSku')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "[concat(variables('vmOsDiskName'),'-0')]",
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage",
-                        "managedDisk": {
-                            "storageAccountType": "Standard_LRS"
-                          }
-                    },
-                    "dataDisks": [
-                        {
-                            "name": "[concat(variables('vmDataDiskName'),'-0')]",
-                            "createOption": "Empty",
-                            "caching": "None",
-                            "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 0,
-                            "managedDisk": {
-                                "storageAccountType": "Standard_LRS"
-                              }
-                        },
-                        {
-                            "name": "[concat(variables('vmDataDiskName'),'-1')]",
-                            "createOption": "Empty",
-                            "caching": "None",
-                            "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 1,
-                            "managedDisk": {
-                                "storageAccountType": "Standard_LRS"
-                              }
-                        }
-                    ]
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNicName')))]"
-                        }
-                    ]
-                }
-            }
-        },
-		{
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmName'),'/CustomScriptExtension')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.4",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[variables('modulesUrlExchangeISODownload')]"
-                    ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'))]"
-                }
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmName'),'/dscExtension')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
-				        "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','CustomScriptExtension')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.15",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "modulesUrl": "[variables('modulesUrlExchange')]",
-                    "configurationFunction": "[variables('configurationFunctionExchange')]",
-                    "properties": {
-                        "DomainName": "[variables('exchangeDomainName')]",
-                        "StorageSize": "[parameters('exchangeStorageSizeInGB')]",
-                        "VMAdminCreds": {
-                            "userName": "[variables('vmAdminUsername')]",
-                            "password": "PrivateSettingsRef:vmAdminPassword"
-                        },
-                        "Location": "[variables('location')]",
-			"Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
-                    }
-                },
-                "protectedSettings": {
-                    "items": {
-                        "vmAdminPassword": "[parameters('vmAdminPassword')]"
-                    },
-                    "DataBlobUri": "[variables('modulesUrlExchangeData')]"
-                }
-            }
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(variables('publicIPAddressName'))]",
+      "location": "[variables('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('uniqueDnsNameForPublicIP')]"
         }
-    ]
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('nsgName')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "nsgsrule",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[variables('virtualNetworkName')]",
+      "location": "[variables('location')]",
+      "dependsOn": [ "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]" ],
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('subnetPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[variables('nsgID')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('vmNicName'))]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'))]",
+        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfigpublic",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName')))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-03-30",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('vmName'))]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/',variables('vmNicName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[variables('vmAdminUsername')]",
+          "adminPassword": "[parameters('vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('vmOsSku')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "[concat(variables('vmOsDiskName'),'-0')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            }
+          },
+          "dataDisks": [
+            {
+              "name": "[concat(variables('vmDataDiskName'),'-0')]",
+              "createOption": "Empty",
+              "caching": "None",
+              "diskSizeGB": "[variables('vmDataDiskSize')]",
+              "lun": 0,
+              "managedDisk": {
+                "storageAccountType": "Standard_LRS"
+              }
+            },
+            {
+              "name": "[concat(variables('vmDataDiskName'),'-1')]",
+              "createOption": "Empty",
+              "caching": "None",
+              "diskSizeGB": "[variables('vmDataDiskSize')]",
+              "lun": 1,
+              "managedDisk": {
+                "storageAccountType": "Standard_LRS"
+              }
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNicName')))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmName'),'/CustomScriptExtension')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[variables('modulesUrlExchangeISODownload')]"
+          ],
+          "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'))]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmName'),'/dscExtension')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','CustomScriptExtension')]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.15",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "modulesUrl": "[variables('modulesUrlExchange')]",
+          "configurationFunction": "[variables('configurationFunctionExchange')]",
+          "properties": {
+            "DomainName": "[variables('exchangeDomainName')]",
+            "StorageSize": "[parameters('exchangeStorageSizeInGB')]",
+            "VMAdminCreds": {
+              "userName": "[variables('vmAdminUsername')]",
+              "password": "PrivateSettingsRef:vmAdminPassword"
+            },
+            "Location": "[variables('location')]",
+            "Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "vmAdminPassword": "[parameters('vmAdminPassword')]"
+          },
+          "DataBlobUri": "[variables('modulesUrlExchangeData')]"
+        }
+      }
+    }
+  ]
 }
