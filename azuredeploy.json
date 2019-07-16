@@ -1,24 +1,24 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
 
-      
+
     "vmAdminPassword": {
-            "type": "securestring",
-            "metadata": {
-                 "description": "Password for the Virtual Machine."
-         }
-        },
-    "trainee": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 3,
-            "metadata": {
-                 "description": "Trainee  Nick Name."
-         }
-        }
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
     },
+    "trainee": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3,
+      "metadata": {
+        "description": "Trainee  Nick Name."
+      }
+    }
+  },
 
   "variables": {
     "exchangeStorageSizeInGB": 10,
@@ -213,16 +213,17 @@
               }
             },
             {
-              "name": "[concat(variables('vmDataDiskName'),'-1')]",
-              "createOption": "Empty",
               "caching": "None",
+              "createOption": "Empty",
               "diskSizeGB": "[variables('vmDataDiskSize')]",
               "lun": 1,
               "managedDisk": {
                 "storageAccountType": "[variables('VMStorageType')]"
-              }
+              },
+              "name": "[concat(variables('vmDataDiskName'),'-1')]"
             }
           ]
+
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -236,94 +237,96 @@
             "enabled": true,
             "storageUri": "[concat('http://', variables('DiagStorageName'), '.blob.core.windows.net')]"
           }
-        }
-      }
-    },
-
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmName'),'/IaaSDiagnostics')]",
-      "apiVersion": "2015-06-15",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "AzureDiagnostics"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Azure.Diagnostics",
-        "type": "IaaSDiagnostics",
-        "typeHandlerVersion": "1.5",
-        "autoUpgradeMinorVersion": true,
-        "settings": {
-          "xmlCfg": "[base64(concat(variables('wadcfgxstart'), variables('wadmetricsresourceid'), variables('wadcfgxend')))]",
-          "storageAccount": "[variables('DiagStorageName')]"
         },
-        "protectedSettings": {
-          "storageAccountName": "[variables('DiagStorageName')]",
-          "storageAccountKey": "[listkeys(variables('accountid'), '2015-06-15').key1]",
-          "storageAccountEndPoint": "https://core.windows.net"
-        }
-      }
-    },
-      {
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmName'),'/CustomScriptExtension')]",
-        "location": "[variables('location')]",
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
-        ],
-        "properties": {
-          "publisher": "Microsoft.Compute",
-          "type": "CustomScriptExtension",
-          "typeHandlerVersion": "1.4",
-          "autoUpgradeMinorVersion": true,
-          "settings": {
-            "fileUris": [
-              "[variables('modulesUrlExchangeISODownload')]"
+        "resources": [
+          {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmName'),'/IaaSDiagnostics')]",
+            "apiVersion": "2015-06-15",
+            "location": "[resourceGroup().location]",
+            "tags": {
+              "displayName": "AzureDiagnostics"
+            },
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
             ],
-            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'))]"
-          }
-        }
-      },
-      {
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmName'),'/dscExtension')]",
-        "location": "[variables('location')]",
-        "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
-          "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','CustomScriptExtension')]"
-        ],
-        "properties": {
-          "publisher": "Microsoft.Powershell",
-          "type": "DSC",
-          "typeHandlerVersion": "2.15",
-          "autoUpgradeMinorVersion": true,
-          "settings": {
-            "modulesUrl": "[variables('modulesUrlExchange')]",
-            "configurationFunction": "[variables('configurationFunctionExchange')]",
             "properties": {
-              "DomainName": "[variables('exchangeDomainName')]",
-              "StorageSize": "[variables('exchangeStorageSizeInGB')]",
-              "VMAdminCreds": {
-                "userName": "[variables('vmAdminUsername')]",
-                "password": "PrivateSettingsRef:vmAdminPassword"
+              "publisher": "Microsoft.Azure.Diagnostics",
+              "type": "IaaSDiagnostics",
+              "typeHandlerVersion": "1.5",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "xmlCfg": "[base64(concat(variables('wadcfgxstart'), variables('wadmetricsresourceid'), variables('wadcfgxend')))]",
+                "storageAccount": "[variables('DiagStorageName')]"
               },
-              "Location": "[variables('location')]",
-              "Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
+              "protectedSettings": {
+                "storageAccountName": "[variables('DiagStorageName')]",
+                "storageAccountKey": "[listkeys(variables('accountid'), '2015-06-15').key1]",
+                "storageAccountEndPoint": "https://core.windows.net"
+              }
             }
           },
-          "protectedSettings": {
-            "items": {
-              "vmAdminPassword": "[parameters('vmAdminPassword')]"
-            },
-            "DataBlobUri": "[variables('modulesUrlExchangeData')]"
+          {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmName'),'/CustomScriptExtension')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Compute",
+              "type": "CustomScriptExtension",
+              "typeHandlerVersion": "1.4",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "fileUris": [
+                  "[variables('modulesUrlExchangeISODownload')]"
+                ],
+                "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'))]"
+              }
+            }
+          },
+
+          {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmName'),'/dscExtension')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
+              "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','CustomScriptExtension')]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Powershell",
+              "type": "DSC",
+              "typeHandlerVersion": "2.15",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "configurationFunction": "[variables('configurationFunctionExchange')]",
+                "modulesUrl": "[variables('modulesUrlExchange')]",
+                "properties": {
+                  "DomainName": "[variables('exchangeDomainName')]",
+                  "StorageSize": "[variables('exchangeStorageSizeInGB')]",
+                  "VMAdminCreds": {
+                    "userName": "[variables('vmAdminUsername')]",
+                    "password": "PrivateSettingsRef:vmAdminPassword"
+                  },
+                  "Location": "[variables('location')]",
+                  "Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
+                }
+              },
+              "protectedSettings": {
+                "items": {
+                  "vmAdminPassword": "[parameters('vmAdminPassword')]"
+                },
+                "DataBlobUri": "[variables('modulesUrlExchangeData')]"
+              }
+            }
           }
-        }
+
+        ]
       }
-    
+    }
   ]
 }
