@@ -242,7 +242,7 @@
 
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "Microsoft.Insights.VMDiagnosticsSettings",
+      "name": "[concat(variables('vmName'),'/IaaSDiagnostics')]",
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
       "tags": {
