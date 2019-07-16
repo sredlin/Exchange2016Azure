@@ -59,7 +59,7 @@
     "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]",
     "DiagStorageName": "[tolower(concat(variables('Company'),parameters('trainee'),'sadiag'))]",
     "DiagStorageType": "Standard_LRS",
-    "VMStorageType": "Premium_LRS"
+    "VMStorageType": "Standard_LRS"
   },
   "resources": [
     {
