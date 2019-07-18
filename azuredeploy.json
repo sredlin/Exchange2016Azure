@@ -36,7 +36,7 @@
     "location": "[resourceGroup().location]",
     "vmOsSku": "2012-R2-Datacenter",
     "vmAdminUsername": "vbu-adm",
-    "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-dc01'))]",
+    "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-dc'))]",
     "vmOsDiskName": "[concat('osdisk-', variables('vmName'))]",
     "vmDataDiskName": "[concat('datadisk-', variables('vmName'))]",
     "vmSize": "Standard_D2_v2",
