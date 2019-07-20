@@ -100,7 +100,7 @@
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
-          "domainNameLabel": "[variables('uniqueDnsNameForPublicIP')]"
+          "domainNameLabel": "[variables('uniqueDnsNameForPublicIPDC')]"
         }
       }
     },
@@ -396,7 +396,7 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('vmNicName'))]",
+      "name": "[concat(variables('vmNicNameEX'))]",
       "location": "[variables('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressNameEX'))]",
@@ -405,7 +405,7 @@
       "properties": {
         "ipConfigurations": [
           {
-            "name": "ipconfigpublic",
+            "name": "ipconfigpublicex",
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
