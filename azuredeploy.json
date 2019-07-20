@@ -212,9 +212,9 @@
               "name": "dataDisks",
               "count": "[variables('vmDataDiskCount')]",
               "input": {
-                "name": "[concat(variables('vmDataDiskName'),'-','copyIndex()')]",
+                "name": "[concat(variables('vmDataDiskName'),'-',copyIndex('dataDisks'))]",
                 "diskSizeGB": "[variables('vmDataDiskSize')]",
-                "lun": "[copyIndex()]",
+                "lun": "[copyIndex('dataDisks')]",
                 "createOption": "Empty",
                 "managedDisk": {
                   "storageAccountType": "[variables('VMStorageType')]"
