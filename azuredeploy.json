@@ -37,8 +37,8 @@
     "vmOsSku": "2012-R2-Datacenter",
     "vmAdminUsername": "vbu-adm",
     "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-dc'))]",
-    "vmOsDiskName": "[concat('osdisk-', variables('vmName'))]",
-    "vmDataDiskName": "[concat('datadisk-', variables('vmName'))]",
+    "vmOsDiskName": "[concat(variables('vmName'),'-osdisk')]",
+    "vmDataDiskName": "[concat(variables('vmName'),'-datadisk')]",
     "vmSize": "Standard_D2_v2",
     "vmDataDiskSize": "15",
     "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmName'),variables('charactersToSkip'))))]",
@@ -176,7 +176,9 @@
       "name": "[concat(variables('vmName'))]",
       "location": "[variables('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/',variables('vmNicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/',variables('vmNicName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/',variables('DiagStorageName'))]"
+
       ],
       "properties": {
         "hardwareProfile": {
