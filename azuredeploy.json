@@ -209,9 +209,10 @@
 
           "copy": [
             {
-              "name": "[concat(variables('vmDataDiskName'),'-','copyIndex()')]",
+              "name": "dataDisks",
               "count": "[variables('vmDataDiskCount')]",
               "input": {
+                "name": "[concat(variables('vmDataDiskName'),'-','copyIndex()')]",
                 "diskSizeGB": "[variables('vmDataDiskSize')]",
                 "lun": "[copyIndex()]",
                 "createOption": "Empty",
