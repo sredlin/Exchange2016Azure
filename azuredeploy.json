@@ -343,7 +343,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('UpdateNetworkURL'), '/', variables('UpdateNetwork'))]",
+          "uri": "[concat(variables('UpdateNetworkURL'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
