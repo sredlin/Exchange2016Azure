@@ -28,15 +28,11 @@
     "imageOffer": "WindowsServer",
     "addressPrefix": "10.0.0.0/16",
     "publicIPAddressNameDC": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-pip-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-    "publicIPAddressNameEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-pip-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-
     "publicIPAddressType": "Dynamic",
     "subnetPrefix": "10.0.0.0/24",
     "subnetName": "[tolower(concat('Subnet0'))]",
     "exchangeDomainName": "[tolower(concat(parameters('trainee'), '.intern'))]",
     "uniqueDnsNameForPublicIPDC": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-dns-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-    "uniqueDnsNameForPublicIPEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-dns-',skip(variables('vmNameEx'),variables('charactersToSkip'))))]",
-
     "location": "[resourceGroup().location]",
     "vmOsSku": "2012-R2-Datacenter",
     "vmAdminUsername": "vbu-adm",
@@ -44,12 +40,9 @@
     "vmNameEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-ex'))]",
     "vmOsDiskName": "[concat(variables('vmName'),'-osdisk')]",
     "vmDataDiskName": "[concat(variables('vmName'),'-datadisk')]",
-    "vmOsDiskNameEX": "[concat(variables('vmNameEX'),'-osdisk')]",
-    "vmDataDiskNameEX": "[concat(variables('vmNameEX'),'-datadisk')]",
     "vmSize": "Standard_D2_v2",
     "vmDataDiskSize": "15",
     "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmName'),variables('charactersToSkip'))))]",
-    "vmNicNameEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmNameEX'),variables('charactersToSkip'))))]",
     "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
@@ -212,29 +205,22 @@
               "storageAccountType": "[variables('VMStorageType')]"
             }
           },
-          "dataDisks": [
+
+          "copy": [
             {
-              "name": "[concat(variables('vmDataDiskName'),'-0')]",
-              "createOption": "Empty",
-              "caching": "None",
-              "diskSizeGB": "[variables('vmDataDiskSize')]",
-              "lun": 0,
-              "managedDisk": {
-                "storageAccountType": "[variables('VMStorageType')]"
+              "name": "dataDisks",
+              "count": "2",
+              "input": {
+                "name": "[concat(variables('vmDataDiskName'),'-','copyIndex()')]",
+                "diskSizeGB": "[variables('vmDataDiskSize')]",
+                "lun": "[copyIndex()]",
+                "createOption": "Empty",
+                "managedDisk": {
+                  "storageAccountType": "[variables('VMStorageType')]"
+                }
               }
-            },
-            {
-              "caching": "None",
-              "createOption": "Empty",
-              "diskSizeGB": "[variables('vmDataDiskSize')]",
-              "lun": 1,
-              "managedDisk": {
-                "storageAccountType": "[variables('VMStorageType')]"
-              },
-              "name": "[concat(variables('vmDataDiskName'),'-1')]"
             }
           ]
-
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -379,44 +365,6 @@
             ]
           }
         }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(variables('publicIPAddressNameEX'))]",
-      "location": "[variables('location')]",
-      "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-        "dnsSettings": {
-          "domainNameLabel": "[variables('uniqueDnsNameForPublicIPEX')]"
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('vmNicNameEX'))]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressNameEX'))]",
-        "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
-      ],
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfigpublicex",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressNameEX')))]"
-              },
-              "subnet": {
-                "id": "[variables('subnetRef')]"
-              }
-            }
-          }
-        ]
       }
     }
 
