@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
 
-
     "vmAdminPassword": {
       "type": "securestring",
       "metadata": {
@@ -15,7 +14,38 @@
       "minLength": 3,
       "maxLength": 3,
       "metadata": {
-        "description": "Trainee  Nick Name."
+        "description": "Trainee Nick Name."
+      }
+    },
+    "SubscriptionID": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 36,
+      "metadata": {
+        "description": "SubsciptionID (for Let's Encrypt)"
+      }
+    },
+    "Tenantid": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 36,
+      "metadata": {
+        "description": "TenantID (for Let's Encrypt)"
+      }
+    },
+    "AppID": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 36,
+      "metadata": {
+        "description": "AppID (for Let's Encrypt)"
+      }
+    },
+    "Password": {
+      "type": "string",
+      "minLength": 24,
+      "metadata": {
+        "description": "Password (for Let's Encrypt)"
       }
     }
   },
@@ -312,6 +342,12 @@
                 "VMAdminCreds": {
                   "userName": "[variables('vmAdminUsername')]",
                   "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "azParams": {
+                    "AZSubscriptionId": "[parameters('SubscriptionID')]",
+                    "AZTenantId": "[parameters('TenantID')]",
+                    "AZAppUsername": "[parameters('ApplicationID')]",
+                    "AZAppPasswordInsecure": "[parameters('Password')]"
                 },
                 "Location": "[variables('location')]",
                 "Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
