@@ -309,8 +309,8 @@
               "properties": {
                 "DomainName": "[variables('exchangeDomainName')]",
                 "StorageSize": "[variables('exchangeStorageSizeInGB')]",
-                "DummyUserCreds": {
-                  "userName": "dummy",
+                "MaxMustermannUserCreds": {
+                  "userName": "MMustermann",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
                 "VMAdminCreds": {
