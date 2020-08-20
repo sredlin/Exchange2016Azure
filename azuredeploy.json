@@ -53,7 +53,7 @@
     "modulesUrlExchange": "[concat(variables('modulesWorkload'),variables('modulesExchange'))]",
     "modulesExchangeData": "ExchangeWorkload.psd1",
     "modulesUrlExchangeData": "[concat(variables('modulesPath'),variables('modulesExchangeData'))]",
-    "configurationFunctionExchange": "ExchangeWorkload.ps1\\InstallAndConfigureExchange",
+    "configurationFunctionExchange": "ExchangeWorkload-master\\ExchangeWorkload.ps1\\InstallAndConfigureExchange",
     "nsgName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nsg-infrastructure'))]",
     "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
     "exchangeInstallerPath": "InstallerExchange",
