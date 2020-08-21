@@ -17,7 +17,7 @@
         "description": "Trainee Nick Name."
       }
     },
-    "SubscriptionID": {
+    "SubID": {
       "type": "string",
       "minLength": 32,
       "maxLength": 36,
@@ -105,10 +105,10 @@
     "UpdateNetwork": "VirtualNetwork.json",
     "UpdateNetworkURL": "[concat(variables('modulesPath'),variables('UpdateNetwork'))]",
     "azParams": {
-      "AZSubscriptionId": "[ variables('SubsciptionID') ]",
-      "Tenantid": "[ variables('TenantID') ]",
-      "AZAppUsername": "[ variables('AppID') ]",
-      "AZAppPasswordInsecure": "[ variables('Password') ]"
+      "AZSubscriptionId": "[ parameters('SubID') ]",
+      "Tenantid": "[ parameters('TenantID') ]",
+      "AZAppUsername": "[ parameters('AppID') ]",
+      "AZAppPasswordInsecure": "[ parameters('Password') ]"
     }
   },
   "resources": [
@@ -305,7 +305,7 @@
           }
         },
         {
-          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "type": "extensions",
           "name": "CustomScriptExtension",
           "apiVersion": "2015-06-15",
           "location": "[variables('location')]",
@@ -327,7 +327,7 @@
         },
 
         {
-           "type": "Microsoft.Compute/virtualMachines/extensions",
+           "type": "extensions",
            "name": "OptainCertificates",
            "apiVersion": "2015-06-15",
            "location": "[variables('location')]",
@@ -351,13 +351,13 @@
          },
 
         {
-          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "type": "extensions",
           "name": "dscExtension",
           "apiVersion": "2015-06-15",
           "location": "[variables('location')]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
-            "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','CustomScriptExtension')]"
+            "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','OptainCertificates')]"
           ],
           "properties": {
             "publisher": "Microsoft.Powershell",
