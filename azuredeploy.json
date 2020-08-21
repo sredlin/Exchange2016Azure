@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
 
@@ -25,7 +25,7 @@
         "description": "SubsciptionID (for Let's Encrypt)"
       }
     },
-    "Tenantid": {
+    "TenantID": {
       "type": "string",
       "minLength": 32,
       "maxLength": 36,
@@ -77,9 +77,11 @@
     "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-    "modulesPath": "https://codeload.github.com/modzilla99/ExchangeWorkload/zip/",
-    "modulesExchange": "exchange-acme",
-    "modulesUrlExchange": "[concat(variables('modulesPath'),variables('modulesExchange'))]",
+    "modulesACMEurl": "https://github.com/modzilla99/Powershell-ACME/raw/master/Powershell-ACME.ps1",
+    "modulesPath": "https://raw.githubusercontent.com/modzilla99/Exchange2016Azure/master/",
+    "modulesWorkload": "https://github.com/modzilla99/ExchangeWorkload/releases/download/0.1/",
+    "modulesExchange": "ExchangeWorkload.zip",
+    "modulesUrlExchange": "[concat(variables('modulesWorkload'),variables('modulesExchange'))]",
     "modulesExchangeData": "ExchangeWorkload.psd1",
     "modulesUrlExchangeData": "[concat(variables('modulesPath'),variables('modulesExchangeData'))]",
     "configurationFunctionExchange": "ExchangeWorkload.ps1\\InstallAndConfigureExchange",
@@ -101,7 +103,13 @@
     "wadmetricsresourceid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('diagnosticsStorageAccountResourceGroup'), '/providers/', 'Microsoft.Compute/virtualMachines/', variables('vmName'))]",
     "wadcfgxend": "\"><MetricAggregation scheduledTransferPeriod=\"PT1H\"/><MetricAggregation scheduledTransferPeriod=\"PT1M\"/></Metrics></DiagnosticMonitorConfiguration></WadCfg>",
     "UpdateNetwork": "VirtualNetwork.json",
-    "UpdateNetworkURL": "[concat(variables('modulesPath'),variables('UpdateNetwork'))]"
+    "UpdateNetworkURL": "[concat(variables('modulesPath'),variables('UpdateNetwork'))]",
+    "azParams": {
+      "AZSubscriptionId": "[ variables('SubsciptionID') ]",
+      "Tenantid": "[ variables('TenantID') ]",
+      "AZAppUsername": "[ variables('AppID') ]",
+      "AZAppPasswordInsecure": "[ variables('Password') ]"
+    }
   },
   "resources": [
     {
@@ -297,9 +305,9 @@
           }
         },
         {
-          "apiVersion": "2015-06-15",
-          "type": "extensions",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "CustomScriptExtension",
+          "apiVersion": "2015-06-15",
           "location": "[variables('location')]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
@@ -307,7 +315,7 @@
           "properties": {
             "publisher": "Microsoft.Compute",
             "type": "CustomScriptExtension",
-            "typeHandlerVersion": "1.4",
+            "typeHandlerVersion": "1.7",
             "autoUpgradeMinorVersion": true,
             "settings": {
               "fileUris": [
@@ -318,11 +326,34 @@
           }
         },
 
+        {
+           "type": "Microsoft.Compute/virtualMachines/extensions",
+           "name": "OptainCertificates",
+           "apiVersion": "2015-06-15",
+           "location": "[variables('location')]",
+           "dependsOn": [
+               "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
+               "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/','CustomScriptExtension')]"
+           ],
+           "properties": {
+               "publisher": "Microsoft.Compute",
+               "type": "CustomScriptExtension",
+               "typeHandlerVersion": "1.7",
+               "autoUpgradeMinorVersion":true,
+               "settings": {
+                  "fileUris": [
+                    "[variables('modulesACMEurl')]"
+
+               ],
+               "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File Powershell-ACME.ps1 -azParams',variables('azParams'))]"
+             }
+           }
+         },
 
         {
-          "apiVersion": "2015-06-15",
-          "type": "extensions",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "dscExtension",
+          "apiVersion": "2015-06-15",
           "location": "[variables('location')]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]",
@@ -342,12 +373,6 @@
                 "VMAdminCreds": {
                   "userName": "[variables('vmAdminUsername')]",
                   "password": "PrivateSettingsRef:vmAdminPassword"
-                },
-                "azParams": {
-                    "AZSubscriptionId": "[parameters('SubscriptionID')]",
-                    "AZTenantId": "[parameters('TenantID')]",
-                    "AZAppUsername": "[parameters('ApplicationID')]",
-                    "AZAppPasswordInsecure": "[parameters('Password')]"
                 },
                 "Location": "[variables('location')]",
                 "Company": "[concat(variables('Company'),'-',parameters('trainee'))]"
