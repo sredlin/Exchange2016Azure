@@ -354,7 +354,7 @@
                   "userName": "WLonska",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
-                "RobertJungCreds": {
+                "RobertJungUserCreds": {
                   "userName": "RJung",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
