@@ -334,6 +334,31 @@
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
 
+                 "CelinaHerzUserCreds": {
+                  "userName": "CHerz",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "WolfgangErnstUserCreds": {
+                  "userName": "WErnst",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "JohannFrickUserCreds": {
+                  "userName": "JFrick",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "SaschaHarzUserCreds": {
+                  "userName": "SHarz",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "WiolettaLonskaUserCreds": {
+                  "userName": "WLonska",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "RobertJungCreds": {
+                  "userName": "RJung",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+
                 "VMAdminCreds": {
                   "userName": "[variables('vmAdminUsername')]",
                   "password": "PrivateSettingsRef:vmAdminPassword"
