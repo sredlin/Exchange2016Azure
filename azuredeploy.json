@@ -313,6 +313,27 @@
                   "userName": "MMustermann",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
+                "ErikaMustermannUserCreds": {
+                  "userName": "EMustermann",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "JohnDoeUserCreds": {
+                  "userName": "JDoe",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "KarlAndersUserCreds": {
+                  "userName": "KAnders",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "VeronikaSpulaUserCreds": {
+                  "userName": "VSpula",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+                "LeaMayerUserCreds": {
+                  "userName": "LMayer",
+                  "password": "PrivateSettingsRef:vmAdminPassword"
+                },
+
                 "VMAdminCreds": {
                   "userName": "[variables('vmAdminUsername')]",
                   "password": "PrivateSettingsRef:vmAdminPassword"
