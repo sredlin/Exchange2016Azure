@@ -35,7 +35,7 @@
     "exchangeDomainName": "[tolower(concat(parameters('trainee'), '.intern'))]",
     "uniqueDnsNameForPublicIPDC": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-dns-',skip(variables('vmName'),variables('charactersToSkip'))))]",
     "location": "[resourceGroup().location]",
-    "vmOsSku": "2012-R2-Datacenter",
+    "vmOsSku": "2016-Datacenter",
     "vmAdminUsername": "vbu-adm",
     "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-dc'))]",
     "vmNameEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-ex'))]",
