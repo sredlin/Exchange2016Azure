@@ -84,3 +84,28 @@ DownloadISO
  iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
  sleep 10
  choco install "netfx-4.8" -y
+ choco install vscode -y
+ choco install microsoft-edge -y
+ 
+ 
+ 
+$LanguageSetting = "de-DE"
+$GeoIDSetting = "94"
+$TimeZoneSetting = "W. Europe Standard Time"
+$regionalsettingsURL = "https://raw.githubusercontent.com/sredlin/Azure/master/AzureVMRegionalSettings/Settings/AzureVMLanguageDE.xml"
+$RegionalSettings = "D:\AzureVMLanguageDE.xml"
+       
+#downdload regional settings file
+Invoke-WebRequest $regionalsettingsURL -OutFile $RegionalSettings
+
+        
+# Set Locale, language etc. 
+& $env:SystemRoot\System32\control.exe "intl.cpl,,/f:`"$RegionalSettings`""
+
+# Set languages/culture. Not needed perse.
+Set-WinSystemLocale $LanguageSetting
+Set-WinUserLanguageList -LanguageList $LanguageSetting -Force
+Set-Culture -CultureInfo $LanguageSetting
+Set-WinHomeLocation -GeoId $GeoIDSetting
+Set-TimeZone -Name $TimeZoneSetting
+ 
