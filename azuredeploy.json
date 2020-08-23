@@ -41,7 +41,7 @@
     "vmNameEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-ex'))]",
     "vmOsDiskName": "[concat(variables('vmName'),'-osdisk')]",
     "vmDataDiskName": "[concat(variables('vmName'),'-datadisk')]",
-    "vmSize": "Standard_D2_v2",
+    "vmSize": "Standard_D3_v2",
     "vmDataDiskSize": "15",
     "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmName'),variables('charactersToSkip'))))]",
     "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
