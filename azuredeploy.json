@@ -394,7 +394,6 @@
                   "userName": "LMayer",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
-
                 "CelinaHerzUserCreds": {
                   "userName": "CHerz",
                   "password": "PrivateSettingsRef:vmAdminPassword"
