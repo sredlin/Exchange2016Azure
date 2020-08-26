@@ -17,6 +17,29 @@
       "metadata": {
         "description": "Trainee  Nick Name."
       }
+    },
+    "Domain": {
+      "type": "Object",
+      "allowedValues": [
+        {
+          "name": "Ausbildung",
+          "ResourceGroup": "rg-publicdns",
+          "domain": "vbu-ausbildung.ml"
+        },
+        {
+          "name": "Schulung",
+          "ResourceGroup": "rg-publicdns-schulung",
+          "domain": "vbu-schulung.ml"
+        }
+      ],
+      "defaultValue": {
+          "name": "Ausbildung",
+          "ResourceGroup": "rg-publicdns",
+          "domain": "vbu-ausbildung.ml"
+        },
+      "metadata": {
+        "description": "Setzt die Domain entsprechend der Auswahl."
+      }
     }
   },
 
@@ -25,6 +48,7 @@
     "exchangeStorageSizeInGB": 10,
     "charactersToSkip": 10,
     "Company": "LEARN",
+    "fqdn": "[concat(parameters('trainee'),'.',parameters('Domain').domain)]",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
     "addressPrefix": "10.0.0.0/16",
@@ -97,6 +121,43 @@
           "domainNameLabel": "[variables('uniqueDnsNameForPublicIPDC')]"
         }
       }
+    },
+    {
+      "apiVersion": "2016-04-01",
+      "type": "Microsoft.Network/dnsZones",
+      "name": "[variables('fqdn')]",
+      "location": "global",
+      "dependsOn": [],
+      "tags": {},
+      "properties": {}
+    },
+    {
+      "apiVersion": "2018-05-01",
+      "name": "NameServerDelegation-d62f6a20837f4d498fe37b42789b907e",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[parameters('Domain').ResourceGroup]",
+      "subscriptionId": "[subscription().subscriptionId]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://dns.hosting.portal.azure.net/dns/Content/4.12.0.1550/Dns/Templates/NSDelegationLinkedTemplate.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "nsServers": {
+            "value": "[reference(variables('fqdn')).nameServers]"
+          },
+          "parentDnsZoneName": {
+            "value": "[parameters('Domain').domain]"
+          },
+          "dnsZoneName": {
+            "value": "[variables('fqdn')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('fqdn')]"
+      ]
     },
     {
       "apiVersion": "2015-06-15",
@@ -333,8 +394,7 @@
                   "userName": "LMayer",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
-
-                 "CelinaHerzUserCreds": {
+                "CelinaHerzUserCreds": {
                   "userName": "CHerz",
                   "password": "PrivateSettingsRef:vmAdminPassword"
                 },
