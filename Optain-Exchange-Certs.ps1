@@ -16,6 +16,10 @@ param (
 
 function Get-LECertificates {
 	
+	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+	Install-PackageProvider -Name NuGet -Force
+	Install-Module -Name Posh-ACME -Force -Scope AllUsers
+
 	$azParams = @{
 		AZSubscriptionId = $SubscriptionID
 		AZTenantId = $TenantId
@@ -23,15 +27,13 @@ function Get-LECertificates {
 		AZAppPasswordInsecure = $AZAppPass
 	}
 
-Install-Module -Name Posh-ACME -Scope AllUsers
+	New-PACertificate *.jla.mustertenant.de -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams 
 
-New-PACertificate *.jla.mustertenant.de -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams 
-
-New-Item -Path C:\Certificates -ItemType Directory -Force 
-$Path = (Get-PACertificate).CertFile  
-$Path = $Path.Substring(0,$Path.Length - 9) 
-$Path = "$Path\*.*" 
-Copy-Item -Path $Path -Destination C:\Certificates -Recurse 
+	New-Item -Path C:\Certificates -ItemType Directory -Force 
+	$Path = (Get-PACertificate).CertFile  
+	$Path = $Path.Substring(0,$Path.Length - 9) 
+	$Path = "$Path\*.*" 
+	Copy-Item -Path $Path -Destination C:\Certificates -Recurse 
 
 	
 }
