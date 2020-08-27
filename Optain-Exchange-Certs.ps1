@@ -23,7 +23,9 @@ function Get-LECertificates {
 		AZAppPasswordInsecure = $AZAppPass
 	}
 
-New-PACertificate *.sre.mustertenant.de -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams 
+Install-Module -Name Posh-ACME -Scope AllUsers
+
+New-PACertificate *.jla.mustertenant.de -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams 
 
 New-Item -Path C:\Certificates -ItemType Directory -Force 
 $Path = (Get-PACertificate).CertFile  
