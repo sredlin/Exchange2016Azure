@@ -2,8 +2,44 @@ param (
 	[Parameter(Mandatory)]
     [string]$uri,
 	[Parameter(Mandatory)]
-    [string]$destination
+	[string]$destination,
+	
+	[Parameter(Mandatory)]
+	[String]$Domain,
+	[Parameter(Mandatory)]
+    [string]$SubscriptionID,
+	[Parameter(Mandatory)]
+	[string]$TenantId,
+	[Parameter(Mandatory)]
+    [string]$AppID,
+	[Parameter(Mandatory)]
+    [string]$AZAppPass
 )
+
+function Get-LECertificates {
+	
+	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+	New-Item -Path C:\Temp -ItemType Directory -Force
+	Install-PackageProvider -Name NuGet -Force
+	Install-Module -Name Posh-ACME -Force -Scope AllUsers
+
+	$azParams = @{
+		AZSubscriptionId = $SubscriptionID
+		AZTenantId = $TenantId
+		AZAppUsername = $AppID
+		AZAppPasswordInsecure = $AZAppPass
+	}
+
+	New-PACertificate *.$Domain -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams
+
+	New-Item -Path C:\Certificates -ItemType Directory -Force 
+	$Path = (Get-PACertificate).CertFile  
+	$Path = $Path.Substring(0,$Path.Length - 9) 
+	$Path = "$Path\*.*" 
+	Copy-Item -Path $Path -Destination C:\Certificates -Recurse 
+
+	
+}
 
 function DownloadISO {
 
@@ -77,6 +113,8 @@ function DownloadISO {
         Throw "Failed to download the file after exhaust retry limit"
     }
 }
+
+Get-LECertificates
 
 DownloadISO
 
