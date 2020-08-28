@@ -40,6 +40,37 @@
       "metadata": {
         "description": "Setzt die Domain entsprechend der Auswahl."
       }
+    },
+    "SubID": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 36,
+      "metadata": {
+        "description": "SubsciptionID (for Let's Encrypt)"
+      }
+    },
+    "TenantID": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 36,
+      "metadata": {
+        "description": "TenantID (for Let's Encrypt)"
+      }
+    },
+    "AppID": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 36,
+      "metadata": {
+        "description": "AppID (for Let's Encrypt)"
+      }
+    },
+    "Password": {
+      "type": "string",
+      "minLength": 24,
+      "metadata": {
+        "description": "Password (for Let's Encrypt)"
+      }
     }
   },
 
@@ -71,6 +102,7 @@
     "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "modulesACMEVars": "[concat(' -Domain ', variables('fqdn'),' -SubscriptionID ',parameters('SubID'),' -TenantID ',parameters('TenantID'),' -AppID ',parameters('AppID'),' -AZAppPass ',parameters('Password'))]",
     "modulesPath": "https://raw.githubusercontent.com/sredlin/Exchange2016Azure/master/",
     "modulesExchange": "ExchangeWorkload.zip",
     "modulesUrlExchange": "[concat(variables('modulesPath'),variables('modulesExchange'))]",
@@ -344,7 +376,7 @@
               "fileUris": [
                 "[variables('modulesUrlExchangeISODownload')]"
               ],
-              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'))]"
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'),variables('modulesACMEVars'))]"
             }
           }
         },
