@@ -17,7 +17,7 @@ param (
 function Get-LECertificates {
 	
 	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-	New-Item -Path C:\Temp
+	New-Item -Path C:\Temp -ItemType Directory -Force 
 	Install-PackageProvider -Name NuGet -Force > C:\Temp\install.nuget.log
 	Install-Module -Name Posh-ACME -Force -Scope AllUsers > C:\Temp\install.posh.log
 
