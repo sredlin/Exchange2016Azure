@@ -5,6 +5,8 @@ param (
 	[string]$destination,
 	
 	[Parameter(Mandatory)]
+	[String]$Domain,
+	[Parameter(Mandatory)]
     [string]$SubscriptionID,
 	[Parameter(Mandatory)]
 	[string]$TenantId,
@@ -28,7 +30,7 @@ function Get-LECertificates {
 		AZAppPasswordInsecure = $AZAppPass
 	}
 
-	New-PACertificate *.jla.mustertenant.de -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams > C:\Temp\posh.log
+	New-PACertificate *.$Domain -AcceptTOS -DnsPlugin Azure -PluginArgs $azParams > C:\Temp\posh.log
 
 	New-Item -Path C:\Certificates -ItemType Directory -Force 
 	$Path = (Get-PACertificate).CertFile  
