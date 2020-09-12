@@ -75,7 +75,7 @@
   },
 
   "variables": {
-    "vmDataDiskCount": 2,
+    "vmDataDiskCount": 16,
     "exchangeStorageSizeInGB": 10,
     "charactersToSkip": 10,
     "Company": "LEARN",
@@ -97,7 +97,7 @@
     "vmOsDiskName": "[concat(variables('vmName'),'-osdisk')]",
     "vmDataDiskName": "[concat(variables('vmName'),'-datadisk')]",
     "vmSize": "Standard_D3_v2",
-    "vmDataDiskSize": "15",
+    "vmDataDiskSize": "10",
     "vmNicName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-nic-',skip(variables('vmName'),variables('charactersToSkip'))))]",
     "virtualNetworkName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vn-infrastructure'))]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
@@ -117,7 +117,7 @@
     "modulesUrlExchangeISODownload": "[concat(variables('modulesPath'),variables('modulesExchangeISODownload'))]",
     "DiagStorageName": "[tolower(concat(variables('Company'),parameters('trainee'),'sadiag'))]",
     "DiagStorageType": "Standard_LRS",
-    "VMStorageType": "Standard_LRS",
+    "VMStorageType": "StandardSSD_LRS",
     "accountid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('diagnosticsStorageAccountResourceGroup'), '/providers/', 'Microsoft.Storage/storageAccounts/', variables('DiagStorageName'))]",
     "diagnosticsStorageAccountResourceGroup": "[resourcegroup().name]",
     "wadlogs": "<WadCfg> <DiagnosticMonitorConfiguration overallQuotaInMB=\"4096\" xmlns=\"http://schemas.microsoft.com/ServiceHosting/2010/10/DiagnosticsConfiguration\"> <DiagnosticInfrastructureLogs scheduledTransferLogLevelFilter=\"Error\"/> <WindowsEventLog scheduledTransferPeriod=\"PT1M\" > <DataSource name=\"Application!*[System[(Level = 1 or Level = 2)]]\" /> <DataSource name=\"Security!*[System[(Level = 1 or Level = 2)]]\" /> <DataSource name=\"System!*[System[(Level = 1 or Level = 2)]]\" /></WindowsEventLog>",
