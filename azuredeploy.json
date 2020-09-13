@@ -93,7 +93,6 @@
     "vmOsSku": "2016-Datacenter",
     "vmAdminUsername": "vbu-adm",
     "vmName": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-dc'))]",
-    "vmNameEX": "[tolower(concat(variables('Company'),'-',parameters('trainee'),'-vm-ex'))]",
     "vmOsDiskName": "[concat(variables('vmName'),'-osdisk')]",
     "vmDataDiskName": "[concat(variables('vmName'),'-datadisk')]",
     "vmSize": "Standard_D3_v2",
