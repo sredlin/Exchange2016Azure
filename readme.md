@@ -5,27 +5,24 @@
 </a>
 
 
-This template deploys a VM with ADDS and Exchange 2016 CU17 installed.
-
-
-
 | Endpoint        | Version           | Validated  |
 | ------------- |:-------------:| -----:|
 | Microsoft Azure      | - | YES |
 
+This template deploys a test environment, the following resources are deployed as part of the solution.
+
 
 ## Deployed resources
 
-The following resources are deployed as part of the solution
-####[Exchange 2016 Non-HA]
-[Deploys a VM, install pre-requisites, downloads Exchange 2016 ISO, install Exchange 2016 on a seperate disk drive (E:) and create Mailbox on a seperate disk drive (F:)]
+
 + **Public IP Address**: Allows connection to a VM
 + **Network Security Group**: 
-+ **Storage Account**: VHDs, Result blobs storage
++ **Storage Account**: Used for Diagnostics
 + **Network Interface**: 
 + **Virtual Network**: 
-+ **Virtual Machine**: To run Jetstress test
-+ **DSC Extension**: Install Exchange 2016
-
++ **Virtual Machine**: Server 2016, Exchange 2016, PDC
++ **DSC Extension**: Used to install ADDS, Exchange 2016, configure OU Structure, create some Users
++ **Custom Script Extension**: Used to download Exchange CU17, install some software and create wildcard certificate
++ **Public DNS Zone**: A public DNS Zone
 
 

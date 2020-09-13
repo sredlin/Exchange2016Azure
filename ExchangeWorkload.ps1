@@ -104,24 +104,13 @@ configuration InstallAndConfigureExchange
 	[string]$domain,$tld = $DomainName.split(".")
 	Node localhost
     {
-		xWaitforDisk Disk2
-        {
-            DiskNumber = $diskNumber
-            RetryIntervalSec = 60
-            RetryCount = 60
-        }
-        xDisk Volume
-        {
-			DiskNumber = $diskNumber
-            DriveLetter = 'F'
-			DependsOn = '[xWaitforDisk]Disk2'
-        }
+
 
 		# Reboot node if necessary
 		xPendingReboot RebootPostInstall
         {
             Name      = "RebootTutGut"
-			DependsOn = "[xDisk]Volume"
+			
         }
 		# Install Exchange 2016 Pre-requisits | Reference: https://technet.microsoft.com/en-us/library/bb691354(v=exchg.160).aspx
 		# Active Directory
