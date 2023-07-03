@@ -171,7 +171,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://dns.hosting.portal.azure.net/dns/Content/4.12.0.1550/Dns/Templates/NSDelegationLinkedTemplate.json",
+          "uri": "https://dns.hosting.portal.azure.net/dns/Content/4.13.0.232-/Dns/Templates/NSDelegationLinkedTemplate.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
