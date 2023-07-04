@@ -118,8 +118,9 @@ Get-LECertificates
 
 DownloadISO
 
+$env:chocolateyVersion = '1.4.0'
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
- Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
  Start-Sleep 10
  choco install "netfx-4.8" -y
  choco install vscode -y
