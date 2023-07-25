@@ -24,18 +24,13 @@
         {
           "name": "Ausbildung",
           "ResourceGroup": "rg-publicdns",
-          "domain": "vbu-ausbildung.ml"
-        },
-        {
-          "name": "Schulung",
-          "ResourceGroup": "rg-publicdns-schulung",
-          "domain": "vbu-schulung.ml"
+          "domain": "vater-lab.de"
         }
       ],
       "defaultValue": {
           "name": "Ausbildung",
           "ResourceGroup": "rg-publicdns",
-          "domain": "vbu-ausbildung.ml"
+          "domain": "vater-lab.de"
         },
       "metadata": {
         "description": "Setzt die Domain entsprechend der Auswahl."
